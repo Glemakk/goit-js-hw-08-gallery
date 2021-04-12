@@ -1,9 +1,9 @@
 import allGallery from "./gallery-items.js";
 
 const galleryItemsContainer = document.querySelector('ul.js-gallery');
-const lightboxModalBlock = document.querySelector('div.lightbox');
+const lightboxModalBlock = document.querySelector('div.js-lightbox');
 const closeModalBtn = document.querySelector('button[data-action="close-lightbox"]');
-const imgSrcRef = document.querySelector('img.lightbox__image');
+const lightboxImgRef = document.querySelector('img.lightbox__image');
 const overlayLightbox = document.querySelector('div.lightbox__overlay');
 
 const galleryItemssMarkup = createGalleryItemssMarkup(allGallery);
@@ -34,8 +34,8 @@ function createGalleryItemssMarkup(allGallery) {
 };
 
 
-closeModalBtn.addEventListener('click', onCloseModal);
-overlayLightbox.addEventListener('click', onCloseModal);
+closeModalBtn.addEventListener('click', removeOpenImgClass);
+overlayLightbox.addEventListener('click', removeOpenImgClass);
 window.addEventListener('keydown', onEscKeyPress);
 
 
@@ -45,24 +45,71 @@ function onGalleryItemsContainerClick(evt) {
     return
   }
 
+  addOpenImgClass();
+  putSrcRef(evt.target.dataset.source);
+  onEscKeyPress(evt) 
+
+};
+
+function putSrcRef(src) {
+  lightboxImgRef.src = src;
+};
+
+function addOpenImgClass() {
   lightboxModalBlock.classList.add('is-open');
-  
-  imgSrcRef.src = evt.target.dataset.source;
+  //arrowSlides();
+  //window.addEventListener('keydown', arrowSlides);
 };
 
 
-
-function onCloseModal() {
+function removeOpenImgClass() {
   lightboxModalBlock.classList.remove('is-open');
   overlayLightbox.classList.remove('is-open');
-  imgSrcRef.src = "";
+  lightboxImgRef.src = "";
+  // window.removeEventListener('keydown', arrowSlides);
 };
 
 function onEscKeyPress(evt) {
   if (evt.code === 'Escape') {
-    onCloseModal();
+    removeOpenImgClass();
   }
-}
+};
+
+
+
+
+//-------------------------------
+
+// const imgInOpemOverlay = document.querySelector('lightbox__image');
+// const imgArray = [...allGallery];
+// let currentIndex = 1;
+
+// const arrowSlides = (evt) => {
+//   if (!evt) {
+//     return
+//   }
+//      if (evt.code === 'ArrowLeft' && currentIndex > 0) {
+//       currentIndex -= 1;
+
+//     } if (evt.code === 'ArrowRight' && currentIndex !== imgArray.length -1) {
+//       currentIndex += 1;
+//   }
+//   currentIndex += 0;
+  
+//   setModalImg(currentIndex);
+  
+// };
+
+// console.log(arrowSlides());
+
+// function setModalImg(index) {
+//   imgArray[index];
+//   lightboxImgRef.src = imgArray[index].original
+//     console.log(currentIndex)
+// }
+// console.log(setModalImg(currentIndex));
+
+//-------------------------------
 
 //(evt.target.nodeName !== 'IMG')    evt.target.dataset.source 
 // document.body.classList.add('is-open');
